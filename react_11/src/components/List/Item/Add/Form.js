@@ -23,8 +23,8 @@ const Form = dataProps => {
     if(title.length > 0 && description.length > 0) {
 
       const item = {
-	title: title,
-	description: description
+        title: title,
+      	description: description
       }
       dataProps.onSubmit(item)
       
@@ -40,15 +40,15 @@ const Form = dataProps => {
 
 
       <input
-	type='text'
-	placeholder='title'
-	ref={ titleRef }
+        type='text'
+        placeholder='title'
+        ref={ titleRef }
       />
 
       <input
-	type='text'
-	placeholder='description'
-	ref={ descriptionRef }
+        type='text'
+        placeholder='description'
+        ref={ descriptionRef }
       />
 
       <button>{ dataProps.status ? 'adding' : 'add' }</button>

@@ -1,38 +1,58 @@
-const useFetch = async dataProps => {
+import { useState } from 'react'
 
 
 
-  const setStatus = dataProps.setStatus
-  const setError = dataProps.setError
+const useFetch = dataProps => {
+
+
+
+  const [status, setStatus] = useState(false)
+  const [error, setError] = useState('')
+
+
+
   const url = dataProps.url
   const method = dataProps.method
-  setStatus(true)
-  setError('')
-  try {
-    if(method === 'POST') {
-      const responce = await fetch(url, {
-	method: 'POST',
-	headers: { 'Content-Type': 'application/json' },
-	body: JSON.stringify({ ...dataProps.item })
-      })
+  const get = method === undefined
+  const post = method === 'POST'
+  const onSuccess = dataProps.onSuccess
+  const handler = async handlerProps => {
+    setStatus(true)
+    setError('')
+    try {
+      let fetchProps = null
+      if(post) {
+        fetchProps = {
+          method: method,
+          headers: { ...dataProps.headers },
+          body: JSON.stringify({ ...handlerProps })
+        }
+      }
+      const responce = await fetch(url, fetchProps ? { ...fetchProps } : null)
       if(!responce.ok) {
-	throw new Error('error_add')
+        throw new Error(get ? 'error_fetch' : 'error_add')
       }
       const data = await responce.json()
-      dataProps.onSubmit(data)
-    } else if(method === 'get') {
-      const responce = await fetch(url)
-      if(!responce.ok) {
-	throw new Error('error_fetch')
+      if(get) {
+        onSuccess(data.products)
+      } else if(post) {
+        onSuccess(data)
       }
-      const data = await responce.json()
-      dataProps.setList(data.products)
+    } catch(error_) {
+      setError(error_.message || 'error')
     }
-  } catch(error_) {
-    setError(error_.message || 'error')
+    setStatus(false)
   }
-  setStatus(false)
-  
+
+
+  return {
+    status,
+    error,
+    handler
+  }
+
+
+
 }
 
 

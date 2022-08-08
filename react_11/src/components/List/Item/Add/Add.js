@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import useFetch from './../../../../hooks/fetch'
 import Section from './../../../UI/Section'
 import Form from './Form'
@@ -9,24 +8,13 @@ const Add = dataProps => {
 
 
 
-  const [status, setStatus] = useState(false)
-  const [error, setError] = useState('')
-
-
-
-  const submitHandler = useFetch
-  const submitProps = {
-    setStatus: setStatus,
-    setError: setError,
+  const fetchHook = useFetch({
     url: 'https://dummyjson.com/products/add',
     method: 'POST',
-    onSubmit: dataProps.onSubmit,
-  }
-  const submitHandler_ = item => {
-
-    submitHandler({ submitProps })
-    
-  }
+    headers: { 'Content-Type': 'application/json' },
+    onSuccess: dataProps.onSubmit
+  })
+  const error = fetchHook.error
 
 
   return (
@@ -35,10 +23,10 @@ const Add = dataProps => {
 
 
 
-      <Form status={ status } onSubmit={ submitHandler_ } />
+      <Form status={ fetchHook.status } onSubmit={ fetchHook.handler } />
 
       { error && (
-	<p>{ error }</p>
+      	<p>{ error }</p>
       ) }
 
 

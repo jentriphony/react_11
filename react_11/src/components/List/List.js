@@ -10,12 +10,13 @@ const List = dataProps => {
 
 
   const list = dataProps.list
+  const listLength = list.length
   let content = null
   if(dataProps.error) {
     content = (
 
       <button onClick={ dataProps.onFetch }>
-	try again
+      	try again
       </button>
       
     )
@@ -25,21 +26,21 @@ const List = dataProps => {
       <p>fetching</p>
       
     )
-  } else if(list.length > 0) {
+  } else if(listLength > 0) {
     content = (
 
       <ul>
-	{ list.map(item => (
-	  <Item key={ item.id } item={ item } />
-	)) }
+        { list.map(item => (
+          <Item key={ item.id } item={ item } />
+        )) }
       </ul>
       
     )
-  } else if(list.length === 0) {
+  } else if(listLength === 0) {
     content = (
 
       <h2>no items</h2>
-      
+    
     )
   }
   
@@ -51,7 +52,7 @@ const List = dataProps => {
 
 
       <div className={ classes.container }>
-	{ content }
+      	{ content }
       </div>
 
 

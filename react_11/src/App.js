@@ -13,32 +13,22 @@ function App() {
 
 
   
-  const [status, setStatus] = useState(false)
-  const [error, setError] = useState('')
   const [list, setList] = useState([])
 
 
 
-  const fetchHandler = useFetch
-  const fetchProps = {
-    setStatus: setStatus,
-    setError: setError,
+  const fetchHook = useFetch({
     url: 'https://dummyjson.com/products?limit=5&select=title,description',
-    method: 'get',
-    setList: setList
-  }
-  const fetchHandler_ = () => {
-
-    fetchHandler(fetchProps)
-
-  }
-
+    onSuccess: setList
+  })
+  const fetchHandler = fetchHook.handler
+  
 
 
   useEffect(() => {
 
-    fetchHandler_()
-    
+    fetchHandler()
+
   }, [])
 
 
@@ -46,15 +36,15 @@ function App() {
   const addHandler = item => {
 
     setList(previousList => {
-      const id = list.reduce((previousItem, currentItem) => {
-	return +previousItem.id > +currentItem.id ? previousItem : currentItem
-      }).id + 1
+      const id = previousList.length > 0 ? list.reduce((previousItem, currentItem) => {
+        return +previousItem.id > +currentItem.id ? previousItem : currentItem
+      }).id + 1 : 1
       return [
-	{
-	  ...item,
-	  id: id
-	},
-	...previousList
+        {
+          ...item,
+          id: id
+        },
+	      ...previousList
       ]
     })
     
@@ -70,10 +60,10 @@ function App() {
       <Add onSubmit={ addHandler } />
 
       <List
-	list={ list }
-	status={ status }
-	error={ error }
-	onFetch={ fetchHandler_ }
+        list={ list }
+        status={ fetchHook.status }
+        error={ fetchHook.error }
+        onFetch={ fetchHandler }
       />
       
 
