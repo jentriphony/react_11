@@ -1,2 +1,2 @@
 # react_11
-interaction_11_practice \ncomment\n this repository contains different implementation of "react_9" repository contents
+interaction_11_custom_hooks \ncomment\n this repository contains different implementation of "react_9" repository contents
